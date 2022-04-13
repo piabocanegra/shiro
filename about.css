@@ -1,0 +1,92 @@
+@font-face {
+    font-family: 'minion';
+    src: url('Minion-Pro-Display.otf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'cooper';
+    src: url('cooper.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+span.close {
+    font-size: 25px;
+    font-family: 'Courier New', Courier, monospace;
+    color: #484848;
+    display: inline-block;
+    margin-right: 20px;
+    padding-top: 15px;
+    border-bottom: 5px solid #FFFC33;
+}
+
+span.close_border {
+    border-bottom: 18px solid yellow;
+}
+
+span.close:hover {
+    border-bottom: 5px solid #BBBBBB;
+}
+
+p.main-header {
+    font-size: 130px;
+    /*font-family: 'CooperHewitt-Medium', arial;*/
+    font-family: 'minion';
+    margin: auto;
+    color: black;
+    display: inline-block;
+    text-align: left;
+    max-width: 900px;
+}
+
+p.main-body-text {
+    font-size: 25px;
+    font-family: 'minion';
+    color: #484848;
+    display: block;
+    text-align: left;
+    line-height: 1.65;
+}
+
+p.main-body-header {
+    font-size: 50px;
+    font-family: 'cooper';
+    color: black;
+    display: inline-block;
+    text-align: left;
+    /*border-bottom: 5px solid yellow;*/
+}
+
+.parts-grid {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    padding: 10px;
+    justify-items: center;
+}
+
+span.team-namestyle {
+    font-size: 25px;
+    font-family: 'minion';
+    color: #484848;
+    display: block;
+}
+
+span.team-titlestyle {
+    font-size: 18px;
+    font-family: 'minion';
+    color: #484848;
+    display: block;
+}
+
+span.unselectable {
+    -webkit-user-select: none;
+    /* Safari */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* IE10+/Edge */
+    user-select: none;
+    /* Standard */
+}

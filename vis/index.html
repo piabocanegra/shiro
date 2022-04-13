@@ -1,0 +1,143 @@
+<html>
+<head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-144246863-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-144246863-1');
+</script>
+
+
+</head>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Crimson+Text" rel="stylesheet">
+<script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js"
+    integrity="sha384-g5uSoOSBd7KkhAMlnQILrecXvzst9TdC09/VM+pjDTCM+1il8RHz5fKANTFFb+gQ" crossorigin="anonymous">
+</script>
+<style>
+     a.close {
+ font-size: 25px;
+ font-family: 'Courier New', Courier, monospace;
+ font-weight: 400;
+ font-style:normal;
+ color: black;
+ display: inline-block;
+ margin-right: 20px;
+ padding-top: 0px;
+ border-bottom: 5px solid #FFFC33;
+}
+a.close:hover {
+  font-size: 25px;
+  font-family: 'Courier New', Courier, monospace;
+  color: black;
+  display: inline-block;
+  margin-right: 20px;
+  padding-top: 0px;
+  border-bottom: 5px solid #BBBBBB;
+ }
+    :root {
+        --animation-time: 3s;
+    }
+
+    @keyframes pulse {
+        0% {
+            stroke-width: 1px;
+        }
+
+        50% {
+            stroke-width: 8px;
+        }
+
+        100% {
+            stroke-width: 1px;
+        }
+    }
+
+    .pulse {
+        animation: pulse var(--animation-time) linear infinite;
+    }
+
+    .hidden {
+        opacity: 0;
+        transition: opacity 0.25s;
+    }
+
+    .topbtn {
+        padding: 25px;
+        height: 10%;
+    }
+
+    #top {
+        height: 10%;
+        border-bottom: 1px solid white;
+    }
+
+    svg {
+        font-family: 'Crimson Text', serif;
+    }
+
+    .carousel {
+        font-family: 'Crimson Text', serif;
+    }
+
+    div,
+    p,
+    text {
+        -webkit-touch-callout: none;
+        /* iOS Safari */
+        -webkit-user-select: none;
+        /* Safari */
+        -khtml-user-select: none;
+        /* Konqueror HTML */
+        -moz-user-select: none;
+        /* Firefox */
+        -ms-user-select: none;
+        /* Internet Explorer/Edge */
+        user-select: none;
+        /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+    }
+
+    svg.carousel, div.carousel{
+        -moz-transition: all .2s ease-in;
+        -o-transition: all .2s ease-in;
+        -webkit-transition: all .2s ease-in;
+    }
+
+    svg.carousel:hover, div.carousel:hover{
+        color: silver;
+    }
+</style>
+
+<body>
+    <div id="top" class="row">
+            <div id="skip" class="topbtn col-sm-2 offset-sm-10"><a class = "close" href = "../about.html">ABOUT</a></div>
+        </div>
+    <svg id="vis">
+        <defs>
+            <marker id="arrow" markerUnits="strokeWidth" markerWidth="12" markerHeight="12" viewBox="0 0 12 12" refX="6"
+                refY="6" orient="auto">
+                <path d="M2,2 L10,6 L2,10 L2,2" style="fill: gray;"></path>
+            </marker>
+            <pattern id="heartback" x="0" y="-0.25" width="1" height="1.25">
+            <image xlink:href="static/vector-02.svg" width="2550" height="3300"/>
+            </pattern>
+            <pattern id="mindback" x="0" y="-0.25" width="1" height="1.25">
+            <image xlink:href="static/vector-03.svg" width="3300" height="2550"/>
+            </pattern>
+            <pattern id="soulback" x="0" y="-0.5" width="1" height="1.5">
+            <image xlink:href="static/vector-01.svg" width="3300" height="2550"/>
+            </pattern>
+        </defs>
+    </svg>
+
+</body>
+<script src="vis-script.js"></script>
+
+</html>

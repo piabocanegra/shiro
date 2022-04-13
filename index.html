@@ -1,0 +1,166 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-144246863-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-144246863-1');
+</script>
+
+
+  <meta charset="utf-8">
+
+  <title>About</title>
+  <meta name="description" content="Intro to Shiro">
+  <meta name="author" content="Shiro">
+
+  <link rel="stylesheet" href="about.css">
+
+</head>
+<style>
+h1 {
+  font-family: "minion";
+   letter-spacing: 3px;
+   color: rgb(75, 75, 75);
+}
+
+.myButton {
+	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	/* background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffffff), color-stop(1, #f6f6f6));
+	background:-moz-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+	background:-webkit-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+	background:-o-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+	background:-ms-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+	background:linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%); */
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0);
+	background-color:#ffffff;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:15px;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	cursor:pointer;
+	color:black;
+	font-family: 'Courier New', Courier, monospace;
+	font-size:24px;
+	padding:20px 60px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ffffff;
+}
+.myButton:hover {
+	/* background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f6f6f6), color-stop(1, #ffffff));
+	background:-moz-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+	background:-webkit-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+	background:-o-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+	background:-ms-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+	background:linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%); */
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6f6f6', endColorstr='#ffffff',GradientType=0);
+	background-color:#f6f6f6;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
+
+#top {
+    height: 10%;
+    border-bottom: 1px solid white;
+    text-align:right;
+}
+
+a.close {
+  font-size: 25px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 400;
+  font-style:normal;
+  color: black;
+  display: inline-block;
+  margin-right: 20px;
+  padding-top: 0px;
+  border-bottom: 5px solid #FFFC33;
+  text-decoration: none;
+}
+a.close:hover {
+  font-size: 25px;
+  font-family: 'Courier New', Courier, monospace;
+  color: black;
+  display: inline-block;
+  margin-right: 20px;
+  padding-top: 0px;
+  border-bottom: 5px solid #BBBBBB;
+  text-decoration: none;
+}
+.topbtn {
+    padding: 25px;
+    height: 10%;
+}
+
+
+
+</style>
+
+<body>
+<div id="top" class="row">
+          <div class="topbtn col-sm-2 offset-sm-10"><a id="skip" class = "close" href = "#">SKIP</a></div>
+      </div>
+<div style = "text-align: center">
+<br>
+<img src="logo.png" style = "max-height:100px;display: inline-block">
+<br>
+<h1>shiro</h1>
+<img src="Animation_1.png" style = "max-height:70px;display: none" id = "img1">
+<br>
+<img src="Animation_2.png" style = "max-height:49px;display: none" id="img2">
+<br>
+<img src="Animation_2.5.png" style = "max-height:49px;display: none" id = "img25">
+<br>
+<img src="Animation_3.png" style = "max-height:49px;display: none" id = "img3">
+<br>
+<br>
+<br>
+<a href="vis/index.html" class="myButton" style = "display:none" id="explorebutton">start exploring</a>
+<br>
+<br>
+
+</div>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+<script>
+function sleep (time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+$('#skip').click(function(e) {
+    $('#img1').stop(true, true);
+    $('#img2').stop(true, true);
+    $('#img25').stop(true, true);
+    $('#img3').stop(true, true);
+    $('#explorebutton').stop(true, true);
+
+});
+
+
+$("#img1").fadeIn(3000, function (){
+    $("#img2").fadeIn(3000, function (){
+        $("#img25").fadeIn(3000, function (){
+            $("#img3").fadeIn(3000, function (){
+                $("#explorebutton").fadeIn(1000, function (){
+});
+})
+})
+})
+})
+</script>
+
+</html>

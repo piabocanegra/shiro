@@ -1,0 +1,440 @@
+<html>
+
+<head>
+    <title> odyssee - Gallery </title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="styles/all.css" media="all" />
+    <link rel="stylesheet" href="https://use.typekit.net/qep5qwj.css">
+    <link rel="icon" type="image/png" href="images/icon.png">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-drag.v1.min.js"></script>
+</head>
+<!-- 
+<ul>
+    <li style="float:right;vertical-align:top"><a href="about.html">About</a></li>
+</ul> -->
+
+<body>
+    <br>
+    <p style="font-family:Courier New; font-size: 23; text-align: center; margin-left:auto; margin-right:auto; padding-top:50;">Welcome to your odyssee portal!</p>
+
+    <div style="text-align: center; color: #fff8eb; margin-bottom: 20px; display:block;">
+        <svg style="margin-top: 100;margin-bottom: 100" height="700" width="1000" class="indTwoWeeks"></svg>
+        <svg style="margin-top: 20; margin-bottom: 100" height="700" width="1000" class="aggTwoWeeks"></svg>
+    </div>
+    <script>
+        let data;
+        let email = "lh484@cornell.edu"; //hardcode
+        let personData = [];
+        let width = 1000;
+        let height = 700;
+        let padding = 50;
+        let numIcons = 6;
+        let textColor = "#484848";
+        let backgroundColor = "#fff8eb";
+        let iconWidth = 70;
+
+
+        let moodList = ["Awful", "Bad", "Ok", "Good", "Amazing"];
+        let attitudeList = ["want to", "have to", "both", "neither"];
+        let dashArray2 = ["0.25 7", "5 7", "0.25 7 5 7", "1000"];
+        let dashArray = {
+            "I want to": "0.25 7",
+            "I have to": "5 7",
+            "I want to and have to": "0.25 7 5 7",
+            "of something else; I neither want to nor have to": "1000"
+        };
+        let attitudeLongtoShort = {
+            "I want to": "want to",
+            "I have to": "have to",
+            "I want to and have to": "both",
+            "of something else; I neither want to nor have to": "neither"
+        };
+        let colorHexArray = {
+            "Awful": "#9f265b",
+            "Bad": "#ca614d",
+            "Ok": "#edc3a3",
+            "Good": "#f2d878",
+            "Amazing": "#ffc500"
+        };
+
+        const getData = async() => {
+            // TODO for Jamal: replace next two lines with json list
+            // personData = getPersonData(data, email);
+            queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            personData = await d3.json("http://odyssee.shiro.community:3005/api/data?email=" + urlParams.get("email") + "&key=" + urlParams.get("key"));
+            //personData = await d3.json("http://localhost:4000/api/data?email=" + urlParams.get("email") + "&key=" + urlParams.get("key"));
+            var everyoneData = await d3.json("/answerAnon.json");
+
+            var categoryMap = getFrequencyByKey("Activity", personData);
+            var categoryFullMap = getFrequencyByKey("Activity", personData, 1);
+            drawMoodByActvitiy(".indTwoWeeks", categoryMap, categoryFullMap, "Your last 2 weeks", personData);
+
+            var categoryMap2 = getFrequencyByKey("Activity", everyoneData);
+            var categoryFullMap2 = getFrequencyByKey("Activity", everyoneData, 1);
+            drawMoodByActvitiy(".aggTwoWeeks", categoryMap2, categoryFullMap2, "Everyone's last 2 weeks", everyoneData);
+
+        }
+
+        // get all data entries for person
+        function getPersonData(data, name) {
+            var list = [];
+            data.forEach(function(d) {
+                if (d.Email == name) {
+                    list.push(d);
+                }
+            });
+
+            return list;
+        }
+
+        function getFrequencyByKey(str, data, index = 0) {
+            var map = new Map();
+            for (var i = 0; i < data.length; i++) {
+                var key = data[i][str].split(":")[index];
+                if (!map.has(key)) {
+                    map.set(key, 1);
+                } else {
+                    map.set(key, map.get(key) + 1);
+                }
+            }
+
+            var sortedMap = new Map([...map.entries()].sort((a, b) => b[1] - a[1]));
+
+            return sortedMap;
+        }
+
+        function getFrequencyByKeys(str1, str2, data) {
+            var map = {};
+            for (var i = 0; i < data.length; i++) {
+                var key = data[i][str1].split(":")[0];
+                var key2 = data[i][str2];
+                if (!(key in map)) {
+                    map[key] = {};
+                    map[key][key2] = 1
+                } else {
+                    map[key][key2] = !(key2 in map[key]) ? 1 : (map[key][key2] + 1);
+                }
+            }
+
+            // var sortedMap = new Map([...map.entries()].sort((a, b) => b[1] - a[1]));
+
+            return map;
+        }
+
+        // add color filters to website
+        function setUpFilters(svgClass) {
+            let svg = d3.select(svgClass);
+            svg.append('filter')
+                .attr('id', 'Amazing')
+                .append('feColorMatrix')
+                .attr('type', 'matrix')
+                .attr('color-interpolation-filters', 'sRGB')
+                .attr('values', "0 0 0 0 1 0 0 0 0 0.772549 0 0 0 0 0 0 0 0 1 0");
+
+            svg.append('filter')
+                .attr('id', 'Good')
+                .append('feColorMatrix')
+                .attr('type', 'matrix')
+                .attr('color-interpolation-filters', 'sRGB')
+                .attr('values', "0 0 0 0 0.9490196 0 0 0 0 0.84705882 0 0 0 0 0.4705882 0 0 0 1 0");
+
+            svg.append('filter')
+                .attr('id', 'Ok')
+                .append('feColorMatrix')
+                .attr('type', 'matrix')
+                .attr('color-interpolation-filters', 'sRGB')
+                .attr('values', "0 0 0 0 0.92941176 0 0 0 0 0.76470588 0 0 0 0 0.63921568 0 0 0 1 0");
+
+            svg.append('filter')
+                .attr('id', 'Bad')
+                .append('feColorMatrix')
+                .attr('type', 'matrix')
+                .attr('color-interpolation-filters', 'sRGB')
+                .attr('values', "0 0 0 0 0.79215686 0 0 0 0 0.380392156 0 0 0 0 0.30196078 0 0 0 1 0");
+
+            svg.append('filter')
+                .attr('id', 'Awful')
+                .append('feColorMatrix')
+                .attr('type', 'matrix')
+                .attr('color-interpolation-filters', 'sRGB')
+                .attr('values', "0 0 0 0 0.6235294 0 0 0 0 0.1490196 0 0 0 0 0.3568627 0 0 0 1 0");
+        }
+
+        function findMode(keyList, map) {
+            let finalMap = {};
+
+            keyList.forEach(function(id) {
+                var keys = Object.keys(map[id]);
+                var maxKey = "";
+                var maxValue = 0;
+
+                keys.forEach(function(reason) {
+                    if (map[id][reason] > maxValue) {
+                        maxKey = reason;
+                        maxValue = map[id][reason]
+                    }
+                });
+
+                finalMap[id] = maxKey;
+            });
+            return finalMap;
+        }
+
+        function findAvgMood(keyList, map) {
+            let finalMap = {};
+            let overallMax = 0;
+            let overallMin = 1000000;
+
+            keyList.forEach(function(id) {
+                var keys = Object.keys(map[id]);
+                var value = 0;
+                var count = 0;
+
+                keys.forEach(function(mood) {
+                    value = value + map[id][mood] * (moodList.indexOf(mood));
+                    count = count + map[id][mood];
+                });
+
+                if (value / count > overallMax) {
+                    overallMax = value / count;
+                }
+                if (value / count < overallMin) {
+                    overallMin = value / count;
+                }
+
+                finalMap[id] = Math.round(value / count);
+            });
+
+            return finalMap;
+        }
+
+        function drawMoodByActvitiy(svgClass, categoryMap, categoryFullMap, title, personData) {
+            let svg = d3.select(svgClass);
+
+            let keyList = Array.from(categoryMap.keys()).slice(0, numIcons);
+            let keyList2 = Array.from(categoryFullMap.keys()).slice(0, numIcons);
+            console.log(categoryFullMap)
+            console.log(keyList);
+            console.log(keyList2);
+
+            let reasonByActivity = getFrequencyByKeys("Activity", "Reason", personData);
+            let feelingByActivity = getFrequencyByKeys("Activity", "Feeling", personData);
+
+            let reasonMap = findMode(keyList, reasonByActivity);
+            let feelingMap = findMode(keyList, feelingByActivity);
+
+            let avgMap = findAvgMood(keyList, feelingByActivity);
+            let xScale = d3.scaleBand()
+                .domain(keyList)
+                .range([padding * 2.5, width]);
+
+            let yScale = d3.scaleLinear()
+                .domain([0, d3.max(keyList, function(d) {
+                    return categoryMap.get(d)
+                })])
+                .range([height - padding * 5, padding * 2]);
+
+            // add tooltip
+            let tooltip = d3.select("body")
+                .append("div")
+                .style("padding", 10)
+                .style("position", "absolute")
+                .style("z-index", "10")
+                .style("visibility", "hidden")
+                .attr("white-space", "pre-line")
+                .style("background-color", backgroundColor)
+                .style("border-radius", "15px")
+                .style("border", "1px solid #cdcdcd");
+
+            // create initial bars
+            svg.selectAll(".bars")
+                .data(keyList)
+                .enter()
+                .append("line")
+                .attr("x1", function(d) {
+                    return xScale(d) + 10;
+                })
+                .attr("x2", function(d) {
+                    return xScale(d) + 10;
+                })
+                .attr("y1", function(d) {
+                    return yScale(0);
+                })
+                .attr("y2", function(d) {
+                    return yScale(categoryMap.get(d))
+                })
+                .attr("stroke", function(d) {
+                    return colorHexArray[moodList[avgMap[d]]];
+                })
+                .attr("stroke-width", 2.5)
+                .style("stroke-linecap", "round")
+                .style("stroke-dasharray", function(d) {
+                    return dashArray[reasonMap[d]];
+                });
+
+            // add icons
+            keyList.forEach(function(d, i) {
+                svg.append('image')
+                    .attr('xlink:href', 'images/' + d + '.svg')
+                    .attr('x', xScale(keyList[i]) - 25)
+                    .attr('y', yScale(0) + 10)
+                    .attr('width', iconWidth)
+                    .attr('height', iconWidth)
+                    .style('filter', function() {
+                        return 'url(#' + moodList[avgMap[keyList[i]]] + ')';
+                    })
+                    .on("mousemove", function() {
+                        console.log(keyList2)
+                        var tooltipText = "<b>ACTIVITY:</b> " + keyList2[i].split("(")[0].toLowerCase() + "</br></br><b>FREQUENCY: </b>" + categoryMap.get(d) + "</br></br><b>AVERAGE MOOD: </b>" + moodList[avgMap[keyList[i]]].toLowerCase() +
+                            "</br></br><b>MOST FREQUENT ATTITUDE: </b>" + attitudeLongtoShort[reasonMap[keyList[i]]];
+                        tooltip
+                            .html(tooltipText)
+                            .style("font-family", "Courier new")
+                            .style("font-size", 12)
+                            .style("text-align", "left")
+                            .style("color", textColor)
+                            .style("visibility", "visible")
+                            .style("max-width", 250)
+                            .style("top", event.pageY + 20)
+                            .style("left", function() {
+                                if (d3.event.clientX < 750) {
+                                    return event.pageX + 20 + "px";
+                                } else {
+                                    return event.pageX - 250 + "px";
+                                }
+                            });
+                    }).on("mouseout", function(d) {
+                        tooltip.style("visibility", "hidden");
+                    });
+            });
+
+            //add title
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', 50)
+                .text(title)
+                .style("font-family", "Courier new")
+                .style("font-size", 25)
+                .style("fill", textColor)
+                .style("text-anchor", "middle")
+
+            //add y axis
+            let yAxis = d3.select(svgClass)
+                .append("g")
+                .attr("class", "y_axis")
+                .attr("transform", "translate(" + (padding * 1.5) + ", 0)")
+                .call(d3.axisRight(yScale).ticks(5).tickFormat(function(d, i, n) {
+                    return n[i + 1] ? d : d + " records";
+                }));
+            yAxis.selectAll("text")
+                .style("font-family", "Courier new")
+                .style("text-anchor", "end")
+                .style("fill", textColor)
+                .style("font-size", 12);
+
+            //add mood legend
+            let moodLegend = d3.select(svgClass)
+                .append("g")
+                .attr("class", "moodLegend")
+                .attr("transform", "translate(" + (padding * 2) + "," + (height - padding * 2.5) + ")");
+            moodLegend.append("text")
+                .attr("x", 2 * padding * 1.75)
+                .attr("y", 15)
+                .text("Average mood")
+                // .style("font-weight", "bold")
+                .style("text-anchor", "middle")
+                .style("font-family", "Courier new")
+                .style("fill", textColor)
+                .style("font-size", 12);
+            moodLegend.selectAll(".moodDots")
+                .data(moodList)
+                .enter()
+                .append('circle')
+                .attr("cx", function(d, i) {
+                    return i * padding * 1.75;
+                })
+                .attr("cy", padding * 1)
+                .attr("r", 5)
+                .style("fill", function(d) {
+                    return colorHexArray[d];
+                });
+            moodLegend.selectAll(".moodText")
+                .data(moodList)
+                .enter()
+                .append('text')
+                .attr("x", function(d, i) {
+                    return i * padding * 1.75;
+                })
+                .attr("y", padding * 1.65)
+                .text(function(d) {
+                    return d;
+                })
+                // .style("font-weight", "bold")
+                .style("text-anchor", "middle")
+                .style("font-family", "Courier new")
+                .style("fill", textColor)
+                .style("font-size", 12);
+
+            // add attitude legend
+            let attitudeLegend = d3.select(svgClass)
+                .append("g")
+                .attr("class", "attitudeLegend")
+                .attr("transform", "translate(" + (width - padding * 9) + "," + (height - padding * 2.5) + ")");
+            attitudeLegend.append("text")
+                .attr("x", 2.5 * padding * 1.75 + padding)
+                .attr("y", 15)
+                .text("Most frequent attitude")
+                // .style("font-weight", "bold")
+                .style("font-family", "Courier new")
+                .style("text-anchor", "end")
+                .style("fill", textColor)
+                .style("font-size", 12);
+            attitudeLegend.selectAll(".attText")
+                .data(attitudeList)
+                .enter()
+                .append('text')
+                .attr("x", function(d, i) {
+                    return i * padding * 1.75 + padding;
+                })
+                .attr("y", padding * 1.65)
+                .text(function(d) {
+                    return d;
+                })
+                .style("text-anchor", "middle")
+                // .style("font-weight", "bold")
+                .style("font-family", "Courier new")
+                .style("fill", textColor)
+                .style("font-size", 12);
+            attitudeLegend.selectAll(".attLine")
+                .data(attitudeList)
+                .enter()
+                .append('line')
+                .attr("x1", function(d, i) {
+                    return i * padding * 1.75 + padding;
+                })
+                .attr("x2", function(d, i) {
+                    return i * padding * 1.75 + padding;
+                })
+                .attr("y1", padding * 1.2)
+                .attr("y2", 35)
+                .attr("stroke", textColor)
+                .attr("stroke-width", 2.5)
+                .style("stroke-linecap", "round")
+                .style("stroke-dasharray", function(d, i) {
+                    return dashArray2[i];
+                });
+        }
+
+        function main() {
+            setUpFilters(".indTwoWeeks");
+            getData();
+        }
+
+
+        main();
+    </script>
+</body>
+
+</html>

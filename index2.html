@@ -1,0 +1,100 @@
+<html>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<style>
+    :root {
+    --animation-time: 1s; 
+    }
+
+    div,
+    h1,
+    h2,
+    h3 {
+        text-align: center;
+    }
+
+
+
+    /* https://css-tricks.com/snippets/css/typewriter-effect/ */
+    .typewriter-eff {
+        overflow: hidden;
+        white-space: nowrap;
+        margin: 0 auto;
+        animation:
+            typing 3s steps(40, end)
+    }
+
+    .typewriter-finished {
+        margin: 0 auto;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    @keyframes typing {
+        from {
+            width: 0
+        }
+
+        to {
+            width: 100%
+        }
+    }
+</style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+
+<body>
+    <div id="top" class="row">
+        <div id="skip" class="topbtn col-sm-2 offset-sm-10">SKIP INTRO</div>
+    </div>
+    <div class='row'>
+        <div class="typewriter col-sm-8 offset-sm-2">
+        </div>
+    </div>
+    <div id = "bottom"></div>
+
+
+</body>
+<script>
+    //these must be formatted nicely; if too large to fit on one line you must split it up here
+    let sentences = [
+        "Lorem ipsum dolor sit amet, consectetur adipiscing",
+        "Ut enim ad minim veniam asdasdasdasdasdasdasdasd",
+        "Duis aute irure dolor in reprehenderitdasdasdasd",
+        "Excepteur sint occaecat cupidatat non proident"
+    ];
+
+    let to = [];
+
+    var display = d3.select(".typewriter");
+    var skip = d3.select("#skip");
+
+    for (var i = 0; i < sentences.length; i++) {
+        let s = sentences[i];
+        to.push(setTimeout(() => {
+            display.append("h2").attr("class", "typewriter-eff").text(s)
+        }, 3000 * i));
+    }
+
+    setTimeout(() => {
+        d3.select("#skip").dispatch('click')
+    }, 3000 * sentences.length);
+
+    skip.on("click", () => {
+        skip.remove();
+        d3.selectAll("h2").remove();
+        to.forEach((id) => clearTimeout(id));
+        setup();
+    });
+
+    function setup(){
+        display.remove();
+        d3.select("#top").append("div").attr("class", "topbtn col-sm-2 offset-sm-10").text("ABOUT");
+        var bottom = d3.select("#bottom");
+        bottom.append("h1").text("Project Name Here");
+        var link = bottom.append("a").attr("href", "./vis");
+        link.append("h3").text("Start Exploring");
+    }
+    to.push(setTimeout(setup, 3000 * sentences.length + 500));
+</script>
+
+</html>
